@@ -20,7 +20,9 @@ clean:
 	rm -rf *.o *.elf *.map
 
 load:
-	openocd -f interface/jlink.cfg -c "transport select hla_swd" -f target/stm32l4x.cfg
+	openocd -f interface/stlink.cfg -c "transport select hla_swd" -f target/stm32l4x.cfg
+	# openocd -f interface/stlink.cfg -c "reset_config none" -f target/stm32l4x.cfg
+	# openocd -f interface/jlink.cfg -c "transport select swd" -f target/stm32l4x.cfg 
 
 client:
 	arm-none-eabi-gdb

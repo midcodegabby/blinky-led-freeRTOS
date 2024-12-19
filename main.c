@@ -24,15 +24,13 @@
 #define RCC_CCIPR (*((volatile uint32_t *) (RCC + 0x88)))		//clk config for peripherals
 
 
-void led_on(void){
+void led_setup(void){
 
 	//set LED pin (GPIOA pin 5) to be general purpose output mode
 	GPIOA_MODER |= (1 << 10);
 	GPIOA_MODER &= ~(1 << 11);
 
 	GPIOA_OTYPER &= ~(1 << 5); // set PA5 to be push-pull
-				   
-	GPIOA_ODR |= (1 << 5); // set led ON
 }
 
 int main(void) {
@@ -42,20 +40,20 @@ int main(void) {
 
 	for(uint32_t i=0; i < 2; i++); 
 
-	led_on();
+	led_setup();
 
 	uint32_t val = 0;
 
 	while (1) {
-	/*	
+		
 		if (val == 100000) {
 
-			GPIOA_ODR &= ~(1 << 5); // set led ON
+			GPIOA_ODR ^= (1 << 5); //toggle LED
 			val = 0;
 		}
 
 		val++;
-	*/
+	
 	}
 
 	return 0;
