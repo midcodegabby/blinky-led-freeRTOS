@@ -3,6 +3,8 @@
 //	Purpose: To get the LD2 on the Nucleo-L476RG to turn on. 
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define GPIOA 0x48000000
 #define RCC 0x40021000
@@ -23,6 +25,7 @@
 #define RCC_APB1ENR1 (*((volatile uint32_t *) (RCC + 0x58)))	//clk enable for peripherals
 #define RCC_CCIPR (*((volatile uint32_t *) (RCC + 0x88)))		//clk config for peripherals
 
+extern void initialize_monitor_handles(void);
 
 void led_setup(void){
 

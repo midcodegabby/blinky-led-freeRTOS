@@ -34,8 +34,8 @@ SECTIONS
 		*(.text)
 		*(.text*)
 		. = ALIGN(4);
-		_etext = .; /*Store the updated location counter value in to a symbol called _etext, note that
-			     the location counter only tracks the VMA, not the LMA!!!*/
+		_etext = .; 
+			     
 
 	}> FLASH 
 	/*This part shows where to put the section in memory*/
@@ -49,7 +49,10 @@ SECTIONS
 		*(.rodata)
 		*(.rodata*)
 		. = ALIGN(4);
+
 	}> FLASH
+
+	_la_data = LOADADDR(.data); /*load the address of data into this symbol*/
 
 	/*This section should include .data (read/write data) section of all input files*/
 	.data : 
@@ -57,12 +60,12 @@ SECTIONS
 		. = ALIGN(4);
 		_sdata = .; /*start of data section*/
 		*(.data)
-		*(.data*)
-		_edata = .; /*end of data section*/
+		*(.data*) /* this merges all seperate .text sections together!!!*/
 		. = ALIGN(4);
+		_edata = .; /*end of data section*/
 
-	/*}> SRAM1 AT> FLASH*/
-	}> SRAM1 
+	}> SRAM1 AT> FLASH
+	/*}> SRAM1 */
 	/* this section is loaded into the flash right after the .text section, but it is within the SRAM*/
 
 	/*This section should include .bss section of all input files*/
@@ -70,11 +73,13 @@ SECTIONS
 	{
 		. = ALIGN(4);
 		_sbss = .;
+		__bss_start__ = _sbss; /*used for newlib.nano*/
 		*(.bss)
 		*(.bss*)
 		*(COMMON)
 		. = ALIGN(4);
 		_ebss = .;
+		__bss_end__ = _ebss;  /*used for newlib.nano*/
 	
 	}> SRAM1
 
@@ -82,6 +87,9 @@ SECTIONS
 	{
 		. = ALIGN(4);
 		_ssystem_ram = .;
+		end = .; /*used for newlib nano*/
+		_end = .; /*used for newlib nano*/
+		__end__ = .; /*used for rdimon*/
 		. = . + _Min_Stack_Size;
 		. = ALIGN(4);
 		_esystem_ram = .;

@@ -11,6 +11,7 @@
 #define SRAM_END (SRAM_START + SRAM_SIZE)
 
 #define STACK_START SRAM_END
+#define CPACR (*((volatile uint32_t *) (0xE000ED88))) //for enabling the FPU!
 
 //use extern uint32_t to access symbols from linker script!
 extern uint32_t _etext;
@@ -25,6 +26,9 @@ extern uint32_t _ebss;
 
 //main() prototype
 int main(void); 
+
+//stdlib initialization function prototype
+void __libc_init_array(void);
 
 //isr declarations; weak allows later mods of NMI_handler function in .c source file
 void Reset_Handler(void);
@@ -265,8 +269,12 @@ void Reset_Handler(void){
 		*pDst++ = 0;
 	}
 
-	//call initialization function of stdlib if needed (not needed for this program)
-	
+	//enable FPU
+        CPACR |= (0xF << 20);
+
+        //call initialization function of stdlib 
+        __libc_init_array();	
+
 	//call main()
 	main();
 }
