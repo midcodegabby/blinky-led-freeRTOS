@@ -8,16 +8,16 @@ CC = arm-none-eabi-gcc
 MACH = cortex-m4
 MCU = -mcpu=$(MACH) -mfloat-abi=hard -mfpu=auto
 CFLAGS = $(MCU) -mthumb $(INCLUDES) --std=c11 -Wall -Wextra -o2 -g3
-LDFLAGS = $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -lc -lm -lnosys -Wl,-Map=final.map
+LDFLAGS = $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -Wl,-Map=final.map
 
 VPATH = $(dir $(SOURCES))
 
-OBJ = $(patsubst %.c, %.o, $(notdir $(SOURCES)))
+OBJ = $(patsubst %.c, %.o, $(notdir $(SOURCES))) 
 
 
-all: $(OBJ) final.elf
+all: final.elf
 
-main.o: main.c main.h
+main.o: main.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 syscalls.o: syscalls.c
@@ -26,15 +26,12 @@ syscalls.o: syscalls.c
 sysmem.o: sysmem.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-stm32_startup.o: startup/stm32_startup.c
+stm32_startup.o: stm32_startup.c 
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-final.elf: $(OBJS)
+final.elf: $(OBJ)
 	$(CC) $(LDFLAGS) -o $@ $^
 
-
-# final_sh.elf: $(OBJ_SH)
-#	$(CC) $(LDFLAGS_SH) -o $@ $^
 
 .PHONY: clean load client
 clean:

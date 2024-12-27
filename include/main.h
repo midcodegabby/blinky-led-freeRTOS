@@ -26,4 +26,7 @@ Date: 12/26/2024
 #define RCC_APB1ENR1 (*((volatile uint32_t *) (RCC + 0x58)))	//clk enable for peripherals
 #define RCC_CCIPR (*((volatile uint32_t *) (RCC + 0x88)))
 
+//void led_setup(void);
+//int main(void); 
+
 #endif 

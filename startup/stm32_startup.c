@@ -270,10 +270,10 @@ void Reset_Handler(void){
 	}
 
 	//enable FPU
-        CPACR |= (0xF << 20);
+    CPACR |= (0xF << 20);
 
-        //call initialization function of stdlib 
-        __libc_init_array();	
+    //call initialization function of stdlib 
+    __libc_init_array();	
 
 	//call main()
 	main();

@@ -94,5 +94,4 @@ SECTIONS
 		. = ALIGN(4);
 		_esystem_ram = .;
 	}> SRAM1
-
 }
