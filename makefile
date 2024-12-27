@@ -9,9 +9,13 @@ LDFLAGS_SH= -mcpu=$(MACH) -mthumb -mfloat-abi=hard -mfpu=auto --specs=rdimon.spe
 # optimizations: oz-min size; os-size/speed; o3-max speed; o2-med speed, less size than o3
 # For Bare-Metal applications: use --specs=nosys.specs to disable syscalls.
 
-all: main.o syscalls.o sysmem.o stm32_startup.o final.elf
+OBJ = main.o syscalls.o sysmem.o stm32_startup.o
+OBJ_SH = main.o stm32_startup.o
 
-semi: main.o syscalls.o sysmem.o stm32_startup.o final_sh.elf
+
+all: $(OBJ) final.elf
+
+semi: $(OBJ_SH) final_sh.elf
 
 main.o:main.c
 	$(CC) $(CFLAGS) -o $@ $^
