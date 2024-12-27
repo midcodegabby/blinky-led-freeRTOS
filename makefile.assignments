@@ -8,16 +8,16 @@ FREERTOS := FreeRTOS/Source
 SOURCES := \
 	$(STARTUP)/stm32_startup.c \
 	$(wildcard src/*.c) \
-	$(FREERTOS)/portable/GCC/ARM_CM4F/port.c \
-	$(FREERTOS)/portable/MemMang/heap_1.c \
-	$(wildcard $(FREERTOS)/*.c)
+	# $(FREERTOS)/portable/GCC/ARM_CM4F/port.c \
+	# $(FREERTOS)/portable/MemMang/heap_1.c \
+	# $(wildcard $(FREERTOS)/*.c)
 
 # use -I to indicate a custom path
 INCLUDES := \
 	-I./ \
 	-Iinclude \
-	-I$(FREERTOS)/portable/GCC/ARM_CM4F \
-	-I$(FREERTOS)/include
+	# -I$(FREERTOS)/portable/GCC/ARM_CM4F \
+	# -I$(FREERTOS)/include
 
 LINKER := $(STARTUP)/stm32_ls.ld
 

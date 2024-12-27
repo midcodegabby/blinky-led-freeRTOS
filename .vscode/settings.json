@@ -1,3 +1,6 @@
 {
-    "makefile.configureOnOpen": true
+    "makefile.configureOnOpen": true,
+    "files.associations": {
+        "main.h": "c"
+    }
 }
