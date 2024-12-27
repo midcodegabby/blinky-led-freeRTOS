@@ -2,16 +2,16 @@
 # Date: 12/26/2024
 # Purpose: compile and link all files.
 
--include makefile.rule
+-include makefile.assignments
 
-CC = arm-none-eabi-gcc
-MACH = cortex-m4
-MCU = -mcpu=$(MACH) -mfloat-abi=hard -mfpu=auto
-CFLAGS = $(MCU) -mthumb $(INCLUDES) --std=c11 -Wall -Wextra -o2 -g3
-LDFLAGS = $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -Wl,-Map=final.map
+CC := arm-none-eabi-gcc
+MACH := cortex-m4
+MCU := -mcpu=$(MACH) -mfloat-abi=hard -mfpu=auto
+CFLAGS := $(MCU) -mthumb $(INCLUDES) --std=c11 -Wall -Wextra -o2 -g3
+LDFLAGS := $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -Wl,-Map=final.map
 
-VPATH = $(dir $(SOURCES))
-OBJ = $(patsubst %.c, %.o, $(notdir $(SOURCES))) 
+VPATH := $(dir $(SOURCES))
+OBJ := $(patsubst %.c, %.o, $(notdir $(SOURCES))) 
 
 all: final.elf
 
