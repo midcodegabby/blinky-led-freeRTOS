@@ -1,40 +1,40 @@
-# note for compilation: can call a specific function defined here by using
-# [make func_name] --> e.g., make clean
-CC=arm-none-eabi-gcc
-MACH=cortex-m4
-CFLAGS= -c -mcpu=$(MACH) -mthumb -mfloat-abi=hard -mfpu=auto --std=c11 -Wall -Wextra -o2 -g3
-LDFLAGS= -mcpu=$(MACH) -mthumb -mfloat-abi=hard -mfpu=auto --specs=nano.specs -T stm32_ls.ld -Wl,-Map=final.map
-LDFLAGS_SH= -mcpu=$(MACH) -mthumb -mfloat-abi=hard -mfpu=auto --specs=rdimon.specs -T stm32_ls.ld -Wl,-Map=final.map
+# Author: Gabriel Rodgers
+# Date: 12/26/2024
+# Purpose: Simplify build process for freeRTOS project.
 
-# optimizations: oz-min size; os-size/speed; o3-max speed; o2-med speed, less size than o3
-# For Bare-Metal applications: use --specs=nosys.specs to disable syscalls.
+CC = arm-none-eabi-gcc
+MACH = cortex-m4
+MCU = -mcpu=$(MACH) -mfloat-abi=hard -mfpu=auto
+CFLAGS = -mthumb $(MCU) --std=c11 -Wall -Wextra -o2 -g3
+LDFLAGS = -mthumb $(MCU) --specs=nano.specs -T stm32_ls.ld -Wl,-Map=final.map
+LDFLAGS_SH = -mthumb $(MCU) --specs=rdimon.specs -T stm32_ls.ld -Wl,-Map=final.map
 
 OBJ = main.o syscalls.o sysmem.o stm32_startup.o
 OBJ_SH = main.o stm32_startup.o
-
 
 all: $(OBJ) final.elf
 
 semi: $(OBJ_SH) final_sh.elf
 
-main.o:main.c
-	$(CC) $(CFLAGS) -o $@ $^
+main.o: main.c main.h
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-syscalls.o:syscalls.c
-	$(CC) $(CFLAGS) -o $@ $^
+syscalls.o: syscalls.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-sysmem.o:sysmem.c
-	$(CC) $(CFLAGS) -o $@ $^
+sysmem.o: sysmem.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-stm32_startup.o:stm32_startup.c
-	$(CC) $(CFLAGS) -o $@ $^
+stm32_startup.o: stm32_startup.c
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-final.elf: main.o syscalls.o sysmem.o stm32_startup.o
+final.elf: $(OBJ)
 	$(CC) $(LDFLAGS) -o $@ $^
 
-final_sh.elf: main.o stm32_startup.o 	# note how syscalls and sysmem is excluded here!
+final_sh.elf: $(OBJ_SH)
 	$(CC) $(LDFLAGS_SH) -o $@ $^
 
+.PHONY: clean load client
 clean:
 	rm -rf *.o *.elf *.map
 
@@ -46,9 +46,6 @@ load:
 client:
 	arm-none-eabi-gdb
 
-# -Wall: show all warnings
-#  clean: function description deletes all .o and .elf files
-#  -c: do not link the files
-#  -o: create object files
-#
 
+# optimizations: oz-min size; os-size/speed; o3-max speed; o2-med speed, less size than o3
+# For Bare-Metal applications: use --specs=nosys.specs to disable syscalls.
