@@ -2,20 +2,21 @@
 # Date: 12/26/2024
 # Purpose: Simplify build process for freeRTOS project.
 
--include makefile.rule
+-include makefile.rules
 
 CC = arm-none-eabi-gcc
 MACH = cortex-m4
 MCU = -mcpu=$(MACH) -mfloat-abi=hard -mfpu=auto
-CFLAGS = $(MCU) -mthumb $(INCLUDES) --std=c11 -Wall -Wextra -o2 -g3
-LDFLAGS = $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -lc -lm -lnosys -Wl,-Map=final.map
+CFLAGS = $(MCU) -mthumb --std=c11 -Wall -Wextra -o2 -g3
+LDFLAGS = $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -Wl,-Map=final.map
+LDFLAGS_SH = -mthumb $(MCU) --specs=rdimon.specs -T $(LINKER) -Wl,-Map=final.map
 
-VPATH = $(dir $(SOURCES))
-
-OBJ = $(patsubst %.c, %.o, $(notdir $(SOURCES)))
-
+OBJ = main.o syscalls.o sysmem.o stm32_startup.o
+OBJ_SH = main.o stm32_startup.o
 
 all: $(OBJ) final.elf
+
+semi: $(OBJ_SH) final_sh.elf
 
 main.o: main.c main.h
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -29,12 +30,12 @@ sysmem.o: sysmem.c
 stm32_startup.o: startup/stm32_startup.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-final.elf: $(OBJS)
+final.elf: $(OBJ)
 	$(CC) $(LDFLAGS) -o $@ $^
 
 
-# final_sh.elf: $(OBJ_SH)
-#	$(CC) $(LDFLAGS_SH) -o $@ $^
+final_sh.elf: $(OBJ_SH)
+	$(CC) $(LDFLAGS_SH) -o $@ $^
 
 .PHONY: clean load client
 clean:
