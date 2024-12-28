@@ -12,11 +12,15 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "clock.h"
 #include "gpio.h"
 #include "timers.h"
+#include "nvic.h"
 
 int main(void) {
 	
 	sysclk_init();
 	peripheral_clk_init();
+
+	nvic_enable();
+	//nvic_priority();
 
 	gpio_led_init();
 	//gpio_led_on();
@@ -25,11 +29,23 @@ int main(void) {
 	timer2_enable();
 
 	while (1) {
-		uint8_t compare = timer2_check();
-
-		if (compare == 1) {
-			gpio_led_toggle();
+		/*
+		if (timer2_check() == 1) {
+			//timer2_clear();
+			//gpio_led_toggle();
 		}
+		*/
+
+		if (TIM2_CNT > 0xFF) {
+			gpio_led_on();
+		}
+
+		/*
+		while ((TIM2_SR & 1) != 1) {
+		}
+		gpio_led_toggle();
+		TIM2_SR &= ~(1);
+		*/
 	}
 
 	return 0;
