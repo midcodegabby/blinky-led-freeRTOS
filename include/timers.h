@@ -15,8 +15,8 @@ Date: 12/27/2024
 #define TIM2_CCMR1 (*((volatile uint32_t *) (TIM2 + 0x18)))
 #define TIM2_CCER (*((volatile uint32_t *) (TIM2 + 0x20)))
 #define TIM2_CNT (*((volatile uint32_t *) (TIM2 + 0x24)))
-#define TIM2_ARR (*((volatile uint32_t *) (TIM2 + 0x2C)))
 #define TIM2_PSC (*((volatile uint32_t *) (TIM2 + 0x28)))
+#define TIM2_ARR (*((volatile uint32_t *) (TIM2 + 0x2C)))
 #define TIM2_CCR1 (*((volatile uint32_t *) (TIM2 + 0x34)))
 
 void timer2_init(void);

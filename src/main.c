@@ -36,9 +36,10 @@ int main(void) {
 		}
 		*/
 
-		if (TIM2_CNT > 0xFF) {
-			gpio_led_on();
+		while (TIM2_CNT <= 0xFFFFF) {
 		}
+
+		//gpio_led_toggle();
 
 		/*
 		while ((TIM2_SR & 1) != 1) {
