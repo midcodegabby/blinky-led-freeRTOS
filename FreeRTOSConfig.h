@@ -40,15 +40,10 @@
  * See http://www.freertos.org/a00110.html
  *----------------------------------------------------------*/
 
-/* Ensure stdint is only used by the compiler, and not the assembler. */
-#ifdef __ICCARM__
-	#include <stdint.h>
-#endif
-
 #define configUSE_PREEMPTION			1
 #define configUSE_IDLE_HOOK				1
 #define configUSE_TICK_HOOK				1
-#define configCPU_CLOCK_HZ				( 4000000U )
+#define configCPU_CLOCK_HZ				( 48000000U )
 #define configTICK_RATE_HZ				( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES			( 5 )
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )
