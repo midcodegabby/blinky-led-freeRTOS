@@ -14,6 +14,9 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "timers.h"
 #include "nvic.h"
 
+#include <FreeRTOS.h>
+#include <task.h>
+
 int main(void) {
 	
 	sysclk_init();

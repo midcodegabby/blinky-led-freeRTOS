@@ -8,7 +8,7 @@ CC := arm-none-eabi-gcc
 MACH := cortex-m4
 MCU := -mcpu=$(MACH) -mfloat-abi=hard -mfpu=auto
 CFLAGS := $(MCU) -mthumb $(INCLUDES) --std=c11 -Wall -Wextra -o2 -g3
-LDFLAGS := $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -Wl,-Map=final.map
+LDFLAGS := $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -lc -lm -Wl,-Map=final.map
 
 VPATH := $(dir $(SOURCES))
 OBJ := $(patsubst %.c, %.o, $(notdir $(SOURCES))) 
