@@ -65,7 +65,6 @@ SECTIONS
 		_edata = .; /*end of data section*/
 
 	}> SRAM1 AT> FLASH
-	/*}> SRAM1 */
 	/* this section is loaded into the flash right after the .text section, but it is within the SRAM*/
 
 	/*This section should include .bss section of all input files*/
@@ -89,7 +88,6 @@ SECTIONS
 		_ssystem_ram = .;
 		end = .; /*used for newlib nano*/
 		_end = .; /*used for newlib nano*/
-		__end__ = .; /*used for rdimon*/
 		. = . + _Min_Stack_Size;
 		. = ALIGN(4);
 		_esystem_ram = .;

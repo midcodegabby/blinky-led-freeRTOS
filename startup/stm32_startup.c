@@ -1,7 +1,8 @@
-//	Author: Gabriel Rodgers
-//	Date: 6/30/2024
-//	this is the startup file for a simple program running on an
-//	STM32L476RGT6 MCU
+/*
+Author: Gabriel Rodgers
+Date: 12/28/2024
+Purpose: startup file for STM32L476RG MCU
+*/
 
 //headers and macros
 #include <stdint.h>
@@ -52,7 +53,6 @@ void EXTI1_IRQHandler 			(void) __attribute__ ((weak, alias("Default_Handler")))
 void EXTI2_IRQHandler 			(void) __attribute__ ((weak, alias("Default_Handler")));           
 void EXTI3_IRQHandler 			(void) __attribute__ ((weak, alias("Default_Handler")));           
 void EXTI4_IRQHandler 			(void) __attribute__ ((weak, alias("Default_Handler")));           
-void DMA1_Stream0_IRQHandler 		(void) __attribute__ ((weak, alias("Default_Handler")));    
 void DMA1_Stream1_IRQHandler 		(void) __attribute__ ((weak, alias("Default_Handler")));    
 void DMA1_Stream2_IRQHandler 		(void) __attribute__ ((weak, alias("Default_Handler")));    
 void DMA1_Stream3_IRQHandler 		(void) __attribute__ ((weak, alias("Default_Handler")));    
@@ -156,7 +156,6 @@ uint32_t vectors[] __attribute__((section(".isr_vector"))) = {
 	(uint32_t) EXTI2_IRQHandler,
 	(uint32_t) EXTI3_IRQHandler,
 	(uint32_t) EXTI4_IRQHandler,
-	(uint32_t) DMA1_Stream0_IRQHandler,
 	(uint32_t) DMA1_Stream1_IRQHandler,
 	(uint32_t) DMA1_Stream2_IRQHandler,
 	(uint32_t) DMA1_Stream3_IRQHandler,
@@ -253,7 +252,8 @@ void Reset_Handler(void){
 	uint8_t *pDst = (uint8_t*)&_sdata;
 	
 	//pSrc is a pointer to the source of the data section (in FLASH)
-	uint8_t *pSrc = (uint8_t*)&_edata;
+	//uint8_t *pSrc = (uint8_t*)&_edata; //this line causes globals to turn to nonsense.
+	uint8_t *pSrc = (uint8_t*)&_la_data;
 
 	for(uint32_t i=0; i < size; i++){
 		*pDst++ = *pSrc++;
@@ -278,5 +278,3 @@ void Reset_Handler(void){
 	//call main()
 	main();
 }
-
-

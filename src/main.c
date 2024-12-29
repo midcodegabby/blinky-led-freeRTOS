@@ -19,7 +19,7 @@ int main(void) {
 	sysclk_init();
 	peripheral_clk_init();
 
-	nvic_enable();
+	//nvic_enable();
 	//nvic_priority();
 
 	gpio_led_init();
