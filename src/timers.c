@@ -24,7 +24,7 @@ void timer2_init() {
     TIM2_EGR |= (1 << 0); //update registers
 
     //TIM2_DIER |= (1 << 1); //enable CC1 interrupt
-    //TIM2_DIER |= (1 << 0); //enable event interrupt
+    TIM2_DIER |= (1 << 0); //enable event interrupt
 
 }
 
@@ -46,20 +46,10 @@ void timer2_clear() {
 
 // IRQ handler for Timer2 global interrupt
 void TIM2_IRQHandler(void) {
-    //nvic_disable();
+    nvic_disable();
 
-    //gpio_led_on();
+    gpio_led_toggle();
 
-    /*
-    //execute the if statement if the compare flag is raised
-    if (TIM2_SR & (1 << 0)) {
-        TIM2_SR &= ~(0x3); //clear the compare flag
-
-        timer2_flag = 1;
-        TIM2_CNT = 0x00;   //reset counter to 0
-    }
-    */
-
-   TIM2_SR &= ~(1 <<0); //clear the UIF flag
-   //nvic_enable();
+    TIM2_SR &= ~(1 <<0); //clear the UIF flag
+    nvic_enable();
 }

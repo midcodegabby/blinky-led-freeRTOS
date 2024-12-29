@@ -19,7 +19,7 @@ int main(void) {
 	sysclk_init();
 	peripheral_clk_init();
 
-	//nvic_enable();
+	nvic_enable();
 	//nvic_priority();
 
 	gpio_led_init();
@@ -36,10 +36,12 @@ int main(void) {
 		}
 		*/
 
+		/*
 		while (TIM2_CNT <= 0xFFFFF) {
 		}
 
-		//gpio_led_toggle();
+		gpio_led_toggle();
+		*/
 
 		/*
 		while ((TIM2_SR & 1) != 1) {
