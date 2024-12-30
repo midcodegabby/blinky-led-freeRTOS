@@ -6,7 +6,7 @@ Purpose: To control timers/counters
 
 #include <stdint.h>
 
-#include "timers.h"
+#include "tcnt.h"
 #include "gpio.h"
 #include "nvic.h"
 

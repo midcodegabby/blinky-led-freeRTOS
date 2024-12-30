@@ -3,8 +3,8 @@ Author: Gabriel Rodgers
 Date: 12/27/2024
 */
 
-#ifndef TIMERS_H_
-#define TIMERS_H_
+#ifndef TCNT_H_
+#define TCNT_H_
 
 #define TIM2 0x40000000
 
@@ -24,4 +24,4 @@ void timer2_enable(void);
 void timer2_disable(void);
 void timer2_duration(uint32_t duration);
 
-#endif /* TIMERS_H_ */
+#endif /* TCNT_H_ */

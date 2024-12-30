@@ -11,19 +11,19 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "main.h"
 #include "clock.h"
 #include "gpio.h"
-#include "timers.h"
+#include "tcnt.h"
 #include "nvic.h"
 #include "systick.h"
 
 #include <FreeRTOS.h>
 #include <task.h>
 
-#define STACK_SIZE (128)
+#define STACK_SIZE (130)
 #define NVIC_PriorityGroup_4 (~(1 << 10))
 
 //task prototypes
-void slow_led_task (void *argument);
-void fast_led_task (void *argument);
+void task1_handler(void *args);
+void task2_handler(void *args);
 
 extern volatile uint32_t timer2_flag;
 
@@ -49,10 +49,17 @@ static void hardware_init(void) {
 
 int main(void) {
 
+	BaseType_t status;
+
 	hardware_init();
 
+	status = xTaskCreate( (TaskFunction_t) task1_handler, "task1", STACK_SIZE, NULL, 1, NULL);
+	configASSERT(status == pdPASS);
 
-	
+	status = xTaskCreate( (TaskFunction_t) task2_handler, "task2", STACK_SIZE, NULL, 1, NULL);
+	configASSERT(status == pdPASS);
+
+	vTaskStartScheduler();
 
 	while (1) {
 	}
@@ -61,13 +68,13 @@ int main(void) {
 }
 
 
-void slow_led_task(void *argument) {
+void task1_handler(void *args) {
 	while(1) {
 
 	}
 }
 
-void fast_led_task(void *argument) {
+void task2_handler (void *args) {
 	while(1) {
 
 	}
