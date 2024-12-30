@@ -8,7 +8,7 @@
 - Timer2 blocking and non-blocking delays
 - Easy to adapt and configure for a new project with more source and header files!
     
-### Usage Guide (requires openOCD and Arm-GNU toolchain):
+### Usage Guide (requires OpenOCD and Arm-GNU toolchain):
 #### Build as-is:
 ```
 make
