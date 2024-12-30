@@ -36,12 +36,13 @@ void timer2_nonblocking_delay(uint32_t cycles) {
     TIM2_EGR |= (1 << 0); //update registers
 }
 
+//THIS FUNCTION DOES NOT WORK RIGHT NOW
 void timer2_blocking_delay(uint32_t cycles) {
-    TIM2_ARR = cycles;
+    TIM2_ARR = cycles+1;
     TIM2_EGR |= (1 << 0); //update registers
     TIM2_CNT = 0;
 
-    while (TIM2_CNT < 1000);   //loop until duration is reached
+    while (TIM2_CNT < cycles);   //loop until duration is reached (995 is the breaking point)
 }
 
 // IRQ handler for Timer2 global interrupt

@@ -88,6 +88,7 @@ SECTIONS
 		_ssystem_ram = .;
 		end = .; /*used for newlib nano*/
 		_end = .; /*used for newlib nano*/
+		__end__ = .; /*used for rdimon*/
 		. = . + _Min_Stack_Size;
 		. = ALIGN(4);
 		_esystem_ram = .;

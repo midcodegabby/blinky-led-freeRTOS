@@ -75,14 +75,18 @@ int main(void) {
 
 void task1_handler(void *args) {
 	while(1) {
-		//gpio_led_on();
-		timer2_blocking_delay(duration_1ms*100);
+		gpio_led_on();
+		//timer2_blocking_delay(duration_1ms*100);
+
+		vTaskDelay(500 / portTICK_PERIOD_MS);
 	}
 }
 
 void task2_handler (void *args) {
 	while(1) {
-		//gpio_led_off();
-		timer2_blocking_delay(duration_1s);
+		gpio_led_off();
+		//timer2_blocking_delay(duration_1s);
+
+		vTaskDelay(200 / portTICK_PERIOD_MS);
 	}
 }
