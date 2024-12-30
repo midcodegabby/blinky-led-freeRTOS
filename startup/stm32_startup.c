@@ -1,7 +1,7 @@
 /*
 Author: Gabriel Rodgers
-Date: 12/28/2024
-Purpose: startup file for STM32L476RG MCU
+Date: 12/30/2024
+Purpose: startup file for STM32L476RG MCU (with hardfault debugging)
 */
 
 //headers and macros
@@ -34,7 +34,7 @@ void __libc_init_array(void);
 //isr declarations; weak allows later mods of NMI_handler function in .c source file
 void Reset_Handler(void);
 void NMI_Handler 			(void) __attribute__ ((weak, alias("Default_Handler"))); 
-void HardFault_Handler 			(void) __attribute__ ((weak, alias("Default_Handler")));
+void HardFault_Handler(void);
 void MemManage_Handler 			(void) __attribute__ ((weak, alias("Default_Handler")));
 void BusFault_Handler 			(void) __attribute__ ((weak, alias("Default_Handler")));
 void UsageFault_Handler 		(void) __attribute__ ((weak, alias("Default_Handler")));
@@ -230,12 +230,24 @@ uint32_t vectors[] __attribute__((section(".isr_vector"))) = {
 	
 }; //can also put __attribute__ stuff at the end of a definition/declaration
 
-//isr definitions -- don't have to define all these exceptions, only the used 
-//ones; we can also create a default handler:
-
 //dummy function
 void Default_Handler(void){
 	while(1);
+}
+
+//this handler debugs hardfaults by sending the registers (before hardfault) to a debug function in main.c
+void HardFault_Handler(void) {
+	 __asm volatile
+    (
+        " tst lr, #4                                                \n"
+        " ite eq                                                    \n"
+        " mrseq r0, msp                                             \n"
+        " mrsne r0, psp                                             \n"
+        " ldr r1, [r0, #24]                                         \n"
+        " ldr r2, handler2_address_const                            \n"
+        " bx r2                                                     \n"
+        " handler2_address_const: .word prvGetRegistersFromStack    \n"
+    );
 }
 
 //this initializes the .data and .bss section

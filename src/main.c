@@ -13,12 +13,11 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "gpio.h"
 #include "tcnt.h"
 #include "nvic.h"
-#include "systick.h"
 
 #include <FreeRTOS.h>
 #include <task.h>
 
-#define STACK_SIZE (130)
+#define STACK_SIZE (50)
 #define NVIC_PriorityGroup_4 (~(1 << 10))
 
 //task prototypes
@@ -31,8 +30,6 @@ extern volatile uint32_t timer2_flag;
 static void hardware_init(void) {
 	sysclk_init();
 	peripheral_clk_init();
-	systick_init();
-	systick_enable();
 	//nvic_enable();		
 	//nvic_priority();	//set interrupts to lowest priority.
 
@@ -53,10 +50,6 @@ int main(void) {
 
 	hardware_init();
 
-	gpio_led_on();
-	timer2_blocking_delay(duration_1s);
-	gpio_led_off();
-
 	status = xTaskCreate( (TaskFunction_t) task1_handler, "task1", STACK_SIZE, NULL, 1, NULL);
 	configASSERT(status == pdPASS);
 
@@ -72,13 +65,12 @@ int main(void) {
 	return 0;
 }
 
-
+/*---------------------------TASKS---------------------------*/
+/*-----------------------------------------------------------*/
 void task1_handler(void *args) {
 	while(1) {
 		gpio_led_on();
 		//timer2_blocking_delay(duration_1ms*100);
-
-		vTaskDelay(500 / portTICK_PERIOD_MS);
 	}
 }
 
@@ -86,7 +78,30 @@ void task2_handler (void *args) {
 	while(1) {
 		gpio_led_off();
 		//timer2_blocking_delay(duration_1s);
-
-		vTaskDelay(200 / portTICK_PERIOD_MS);
 	}
 }
+/*-----------------------------------------------------------*/
+
+/*----------------------------HOOKS--------------------------*/
+/*-----------------------------------------------------------*/
+//allows for debugging in the case of stack overflow.
+void vApplicationStackOverflowHook( TaskHandle_t pxTask,
+                                    char * pcTaskName )
+{
+    ( void ) pcTaskName;
+    ( void ) pxTask;
+
+    /* Run time stack overflow checking is performed if
+     * configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
+     * function is called if a stack overflow is detected. */
+    taskDISABLE_INTERRUPTS();
+
+	//do stuff in here to debug
+    for( ; ; ) {
+		gpio_led_on();
+		timer2_blocking_delay(duration_1ms*100);
+	}
+    
+}
+/*-----------------------------------------------------------*/
+

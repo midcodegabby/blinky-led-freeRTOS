@@ -25,7 +25,7 @@ final.elf: $(OBJ)
 
 .PHONY: clean install load client
 clean:
-	rm -rf *.o *.elf *.map
+	rm -rf *.o *.elf *.map memory_debug/*.txt
 
 install:
 	openocd -f interface/stlink.cfg -c "transport select hla_swd" -f target/stm32l4x.cfg -c \
@@ -41,6 +41,13 @@ load:
 client:
 	arm-none-eabi-gdb
 
+# objump
+dump:
+	arm-none-eabi-objdump -D final.elf > memory_debug/disassembly.txt
+
+# symbol table
+symbols:
+	nm final.elf > memory_debug/symbols.txt
 
 # optimizations: oz-min size; os-size/speed; o3-max speed; o2-med speed, less size than o3
 # For Bare-Metal applications: use --specs=nosys.specs to disable syscalls.

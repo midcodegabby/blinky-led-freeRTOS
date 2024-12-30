@@ -9,9 +9,9 @@ _Min_Stack_Size = 0x200;
 
 MEMORY
 {
-	FLASH (rx):ORIGIN = 0x08000000, LENGTH = 1024K
 	SRAM1 (rwx):ORIGIN = 0x20000000, LENGTH = 96K
 	SRAM2 (rwx):ORIGIN = 0x10000000, LENGTH = 32K
+	FLASH (rx):ORIGIN = 0x08000000, LENGTH = 1024K
 }
 
 SECTIONS
@@ -84,13 +84,21 @@ SECTIONS
 
 	.dynamic_allocations : 
 	{
-		. = ALIGN(4);
+		. = ALIGN(8);
 		_ssystem_ram = .;
-		end = .; /*used for newlib nano*/
-		_end = .; /*used for newlib nano*/
-		__end__ = .; /*used for rdimon*/
+		PROVIDE(end = .); /*used for newlib nano*/
+		PROVIDE(_end = .); /*used for newlib nano*/
+		. = . + _Min_Heap_Size;
 		. = . + _Min_Stack_Size;
-		. = ALIGN(4);
+		. = ALIGN(8);
 		_esystem_ram = .;
 	}> SRAM1
+
+	/DISCARD/ :
+	{
+		libc.a (*)
+		libm.a(*)
+		libgcc.a(*)
+	}
+	.ARM.attributes 0 : { *(.ARM.attributes) }
 }
