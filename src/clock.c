@@ -5,7 +5,6 @@ Purpose: Configure clocks for system and peripherals
 */
 
 #include <stdint.h>
-#include <stdio.h>
 
 #include "clock.h"
 
@@ -20,7 +19,7 @@ void sysclk_init(void) {
 	RCC_CR &= ~(0xF << 4);
 	RCC_CR |= (0xB << 4);
 
-	for (volatile uint8_t i = 0; i < 255; i++);
+	for (volatile uint8_t i = 0; i < 8; i++);
 }
 
 //enable HSI16 clock
@@ -41,5 +40,5 @@ void peripheral_clk_init(void) {
 	//RCC_AHB2ENR |= (1 << 2); //GPIOC enable
 	//RCC_APB2ENR |= (1 << 0); //SYSCFG enable
 
-	for (volatile uint8_t i = 0; i < 255; i++);
+	for (volatile uint8_t i = 0; i < 8; i++);
 }

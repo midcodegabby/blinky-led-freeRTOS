@@ -24,8 +24,8 @@ void nvic_disable(void) {
 void nvic_priority(void) {
 	//change priority of button interrupt (40) to lowest
 	NVIC_IPR10 |= (0xF << 4); 
-	//change priority of capture interrupt 1 (28) to 2nd lowest
-	NVIC_IPR7 |= (0xE << 0);
+	//change priority of TIM2 global interrupt (28) to lowest
+	NVIC_IPR7 |= (0xF << 0);
 
 }
 

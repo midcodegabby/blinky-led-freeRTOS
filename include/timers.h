@@ -22,7 +22,6 @@ Date: 12/27/2024
 void timer2_init(void);
 void timer2_enable(void);
 void timer2_disable(void);
-uint8_t timer2_check(void);
-void timer2_clear(void);
+void timer2_duration(uint32_t duration);
 
 #endif /* TIMERS_H_ */

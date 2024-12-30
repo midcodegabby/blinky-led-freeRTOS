@@ -1,6 +1,8 @@
 {
     "makefile.configureOnOpen": true,
     "files.associations": {
-        "main.h": "c"
+        "main.h": "c",
+        "clock.h": "c",
+        "gpio.h": "c"
     }
 }

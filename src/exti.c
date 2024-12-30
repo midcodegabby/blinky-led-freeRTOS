@@ -5,13 +5,11 @@ Purpose: to enable interrupts and handle some IRQs
 */
 
 #include <stdint.h>
-#include <stdio.h>
 
 #include "exti.h"
 #include "clock.h"
 #include "nvic.h"
 #include "gpio.h"
-#include "main.h"
 
 //enable interrupts
 void exti_init(void) {
