@@ -15,7 +15,7 @@ make
 make install
 ```
     
-#### Use HardFault debugging to find cause of HardFault:
+#### Use HardFault debugging to find cause of the Hard Fault:
 1. Create memory debug files
 ```
 make symbols
@@ -25,10 +25,10 @@ make dump
 - disassembly.txt - contains raw memory and instructions of the application  
 - symbols.txt - contains the symbol table of the application  
    
-2. check where the program counter (pc) was at when the HardFault occurred:  
-- search for `pc` in symbols.txt: this will give you a memory address where pc is located, which we will call `pc_address`   
+2. Check where the program counter (pc) was at when the Hard Fault occurred:  
+- search for `pc` in symbols.txt: this will give you the memory address of pc, which we will call `pc_address`   
     
-3. Run a gdb server/client to check what address `pc` holds during the HardFault:   
+3. Run a gdb server/client to check what address `pc` holds during the Hard Fault:   
 - run the load and client commands in separate terminals:    
 ```
 make load
@@ -40,12 +40,12 @@ make client
     monitor resume
     monitor mdw 0xpc_address 1
 ```
--> this will return the address that `pc` contained when the HardFault occurred, which we will call `hardfault_address`.  
+-> this will return the address that `pc` contained when the Hard Fault occurred, which we will call `hardfault_address`.  
    
 4. Find the hardfault_address in disassembly.txt by searching for the 6 nibbles in the middle of `hardfault_address`  
 - i.e., if `hardfault_address` = 08001049, then you would search for 800104 in disassembly.txt.   
    
-5. This much information should allow you to figure out the root cause of the HardFault.   
-- i.e., if you have a misaligned address (like the example above), then you can find which function/IRQ_Handler caused that issue.  
+5. This much information should allow you to figure out the root cause of the Hard Fault.   
+- i.e., if you have a misaligned address (like the example above), then you can find which function/IRQ_Handler caused that issue and go from there.  
     
 
