@@ -22,6 +22,7 @@ Date: 12/27/2024
 void timer2_init(void);
 void timer2_enable(void);
 void timer2_disable(void);
-void timer2_duration(uint32_t duration);
+void timer2_nonblocking_delay(uint32_t cycles);
+void timer2_blocking_delay(uint32_t cycles);
 
 #endif /* TCNT_H_ */

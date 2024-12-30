@@ -33,8 +33,8 @@ static void hardware_init(void) {
 	peripheral_clk_init();
 	systick_init();
 	systick_enable();
-	nvic_enable();		
-	nvic_priority();	//set interrupts to lowest priority.
+	//nvic_enable();		
+	//nvic_priority();	//set interrupts to lowest priority.
 
 	//Make sure NVIC uses no subpriorities
 	AIRCR |= (VECTKEY);	//use the VECTKEY to gain write access to the AIRCR register
@@ -53,6 +53,10 @@ int main(void) {
 
 	hardware_init();
 
+	gpio_led_on();
+	timer2_blocking_delay(duration_1s);
+	gpio_led_off();
+
 	status = xTaskCreate( (TaskFunction_t) task1_handler, "task1", STACK_SIZE, NULL, 1, NULL);
 	configASSERT(status == pdPASS);
 
@@ -61,6 +65,7 @@ int main(void) {
 
 	vTaskStartScheduler();
 
+	//if the program gets to here, then that means that the heap was overrun - which is not good.
 	while (1) {
 	}
 
@@ -70,12 +75,14 @@ int main(void) {
 
 void task1_handler(void *args) {
 	while(1) {
-
+		//gpio_led_on();
+		timer2_blocking_delay(duration_1ms*100);
 	}
 }
 
 void task2_handler (void *args) {
 	while(1) {
-
+		//gpio_led_off();
+		timer2_blocking_delay(duration_1s);
 	}
 }

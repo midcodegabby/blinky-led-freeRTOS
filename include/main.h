@@ -14,7 +14,10 @@ Date: 12/26/2024
 
 #define VECTKEY (0x5FA << 16)
 
-static void hardware_init(void);
+#define duration_1s (1000000U)
+#define duration_1ms (1000U)
+#define duration_1us (1U)
+
 int main(void); 
 
 #endif /* MAIN_H_*/

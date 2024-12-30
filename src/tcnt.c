@@ -9,17 +9,17 @@ Purpose: To control timers/counters
 #include "tcnt.h"
 #include "gpio.h"
 #include "nvic.h"
-
-#define duration_1_second (0x02DC6C00)
+#include "main.h"
 
 volatile uint32_t timer2_flag = 0;
 
 //init the timer2 with internal clock, compare mode, and interrupts.
 void timer2_init() {
     TIM2_CR1 |= (1 << 7);   //enable buffering for auto-reload
-    TIM2_ARR = duration_1_second;  
+    TIM2_PSC = 47;  //prescaler for 1MHz timer frequency
+    TIM2_ARR = duration_1s;  
     TIM2_EGR |= (1 << 0); //update registers
-    TIM2_DIER |= (1 << 0); //enable event interrupt
+    //TIM2_DIER |= (1 << 0); //enable event interrupt
 }
 
 void timer2_enable() {
@@ -31,9 +31,17 @@ void timer2_disable() {
 }
 
 //Takes as input a duration in clock pulses, and sets the duration to that value.
-void timer2_duration(uint32_t duration) {
-    TIM2_ARR = duration;
+void timer2_nonblocking_delay(uint32_t cycles) {
+    TIM2_ARR = cycles;
     TIM2_EGR |= (1 << 0); //update registers
+}
+
+void timer2_blocking_delay(uint32_t cycles) {
+    TIM2_ARR = cycles;
+    TIM2_EGR |= (1 << 0); //update registers
+    TIM2_CNT = 0;
+
+    while (TIM2_CNT < 1000);   //loop until duration is reached
 }
 
 // IRQ handler for Timer2 global interrupt
