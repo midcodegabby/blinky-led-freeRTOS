@@ -1,5 +1,5 @@
 # blinky_led_freeRTOS
-### Basic LED blinky project using FreeRTOS on the STM32L476 MCU.  
+### Basic LED blinky project using FreeRTOS on STM32L476 MCUs.  
 - 2 tasks with equal priority toggle an LED on and off.   
 - No CMSIS used for in-depth learning about FreeRTOS use with Cortex-M MCUs.   
     
