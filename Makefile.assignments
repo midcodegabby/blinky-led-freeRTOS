@@ -6,7 +6,6 @@ STARTUP := startup
 FREERTOS := FreeRTOS/Source
 
 SOURCES := \
-	$(STARTUP)/stm32_startup.c \
 	$(wildcard src/*.c) \
 	$(FREERTOS)/portable/GCC/ARM_CM4F/port.c \
 	$(FREERTOS)/portable/MemMang/heap_4.c \
@@ -15,10 +14,10 @@ SOURCES := \
 # use -I to indicate a custom path
 INCLUDES := \
 	-I./ \
-	-Iinclude \
+    -Iinclude \
+	-I../STM32CubeH7/Drivers/CMSIS/Include \
 	-I$(FREERTOS)/portable/GCC/ARM_CM4F \
 	-I$(FREERTOS)/include
 
-LINKER := $(STARTUP)/stm32_ls.ld
-
-
+LINKER := $(STARTUP)/ls.ld
+STARTUP_FILE := startup/startup.s

@@ -1,28 +1,19 @@
-/*
-Author: Gabriel Rodgers
-Date: 12/27/2024
+/* 
+Author: Gabriel Rodgers <gabrielrodgers4i@gmail.com>
+Date: 6/9/2025
 */
 
-#ifndef TCNT_H_
-#define TCNT_H_
+#include <stdint.h>
 
-#define TIM2 0x40000000
+#ifndef _TCNT_H
+#define _TCNT_H
 
-#define TIM2_CR1 (*((volatile uint32_t *) (TIM2)))
-#define TIM2_DIER (*((volatile uint32_t *) (TIM2 + 0x0C)))
-#define TIM2_SR (*((volatile uint32_t *) (TIM2 + 0x10)))
-#define TIM2_EGR (*((volatile uint32_t *) (TIM2 + 0x14)))
-#define TIM2_CCMR1 (*((volatile uint32_t *) (TIM2 + 0x18)))
-#define TIM2_CCER (*((volatile uint32_t *) (TIM2 + 0x20)))
-#define TIM2_CNT (*((volatile uint32_t *) (TIM2 + 0x24)))
-#define TIM2_PSC (*((volatile uint32_t *) (TIM2 + 0x28)))
-#define TIM2_ARR (*((volatile uint32_t *) (TIM2 + 0x2C)))
-#define TIM2_CCR1 (*((volatile uint32_t *) (TIM2 + 0x34)))
+#define ONE_SECOND_10KHZ		(0x2710U)
 
-void timer2_init(void);
-void timer2_enable(void);
-void timer2_disable(void);
-void timer2_nonblocking_delay(uint32_t cycles);
-void timer2_blocking_delay(uint32_t cycles);
+void timer3_pwm_init(void);
+void timer12_pwm_init(void);
+void timer3_up_init(void);
+void timer3_blocking_delay(const uint32_t delay); 
+void timer_pwm_set_duty(uint8_t timer_num, uint8_t duty);
 
-#endif /* TCNT_H_ */
+#endif /* _TCNT_H */

@@ -1,12 +1,14 @@
-/*
-main.h
-
-Author: Gabriel Rodgers
-Date: 12/26/2024
+/* 
+Author: Gabriel Rodgers <gabrielrodgers4i@gmail.com>
+Date: 6/9/2025
 */
 
-#ifndef MAIN_H_
-#define MAIN_H_
+#include <stdint.h>
+
+#ifndef _MAIN_H
+#define _MAIN_H
+
+#define SYSCLK_FREQ     (64000000U)
 
 #define SCB 0xE000E008
 
@@ -14,10 +16,9 @@ Date: 12/26/2024
 
 #define VECTKEY (0x5FA << 16)
 
-#define duration_1s (1000000U)
-#define duration_1ms (1000U)
-#define duration_1us (1U)
+typedef enum {
+    PRESSED,
+    UNPRESSED
+} button_state_t;
 
-int main(void); 
-
-#endif /* MAIN_H_*/
+#endif /* _MAIN_H */

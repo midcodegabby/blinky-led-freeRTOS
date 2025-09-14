@@ -1,48 +1,34 @@
-/*
-Author: Gabriel Rodgers
-Date: 10/13/2024
-Purpose: to enable interrupts and handle some IRQs
+/* 
+Author: Gabriel Rodgers <gabrielrodgers4i@gmail.com>
+Date: 6/5/2025
 */
 
 #include <stdint.h>
 
+#include "stm32h723xx.h"
 #include "exti.h"
-#include "clock.h"
-#include "nvic.h"
 #include "gpio.h"
+#include "nvic.h"
+#include "main.h"
 
-//enable interrupts
+extern const GPIO_mode_t led_mode;
+extern volatile button_state_t button; 
+
 void exti_init(void) {
-
-        //enable falling edge trigger for line 13
-        EXTI_FTSR1 |= (1 << 13);
-
-        //disable rising edge trigger for line 13
-        EXTI_RTSR1 &= ~(1 << 13);
-
-        //choose PC13 to be the event trigger for EXTI13
-        SYSCFG_EXTICR4 |= (1 << 5);
+    SYSCFG->EXTICR[3] |= (0x2 << 4); //set EXTI line 13 to PC13
+	EXTI->EMR1 |= (1 << 13); //unmask event line 13
+	EXTI->RTSR1 |= (1 << 13); //enable rising edge trigger for line 13
+	EXTI->IMR1 |= (1 << 13); //unmask interrupt line 13
 }
 
-void exti_enable(void) {
-        //enable interrupts for line 13, corresponding to the user button
-        EXTI_IMR1 |= (1 << 13);
-}
-
-void exti_disable(void) {
-        //disable interrupts for line 13, corresponding to the user button
-        EXTI_IMR1 &= ~(1 << 13);
-}
-
-//IRQ handler for button push interrupt
 void EXTI15_10_IRQHandler(void) {
-	//disable interrupts
-        nvic_disable(); 
-	
-	gpio_led_toggle();
+    EXTI->IMR1 &= ~(1 << 13); //mask interrupts and events from line 13
+	EXTI->EMR1 &= ~(1 << 13);
 
-        //clear any pending interrupts and re-enable interrupts
-        EXTI_PR1 |= (1 << 13);
-	nvic_enable();
+	button = PRESSED;
+
+	NVIC->ICPR[1] |= (1 << 8); //clear pending interrupt 40
+	EXTI->PR1 |= (1 << 13); //clear pending interrupts on line 13
+	EXTI->IMR1 |= (1 << 13); //unmask interrupt line 13
+	EXTI->EMR1 |= (1 << 13); //unmask event line 13
 }
-

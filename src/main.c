@@ -12,6 +12,7 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "clock.h"
 #include "gpio.h"
 #include "tcnt.h"
+#include "exti.h"
 #include "nvic.h"
 
 #include <FreeRTOS.h>
@@ -20,27 +21,31 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #define STACK_SIZE (50)
 #define NVIC_PriorityGroup_4 (~(1 << 10))
 
-//task prototypes
+const GPIO_mode_t led_mode = OUTPUT;
+const uint8_t pwm_max = 0xF;
+volatile button_state_t button = UNPRESSED;
+
+
+/* task prototypes */
+
 void task1_handler(void *args);
 void task2_handler(void *args);
 
-extern volatile uint32_t timer2_flag;
 
 //This function initializes all the hardware required for the rtos tasks
 static void hardware_init(void) {
-	sysclk_init();
-	peripheral_clk_init();
-	//nvic_enable();		
-	//nvic_priority();	//set interrupts to lowest priority.
-
-	//Make sure NVIC uses no subpriorities
+	clock_peripherals_init();
+	gpio_button_init();
+	gpio_led_init(led_mode);
+	nvic_enable();
+	exti_init(); 
+	//timer3_pwm_init();
+	//timer12_pwm_init();
+	//timer3_down_init(); 	
+	//uart_init(38400);   	
+	//uart_init(921600);
 	AIRCR |= (VECTKEY);	//use the VECTKEY to gain write access to the AIRCR register
-	AIRCR &= (NVIC_PriorityGroup_4); //clear bit 10 in AIRCR, resulting in no subpriorities
-
-	gpio_led_init();
-
-	timer2_init();
-	timer2_enable();
+    AIRCR &= (NVIC_PriorityGroup_4); //clear bit 10 in AIRCR, resulting in no subpriorities
 }
 
 
@@ -69,15 +74,17 @@ int main(void) {
 /*-----------------------------------------------------------*/
 void task1_handler(void *args) {
 	while(1) {
-		gpio_led_on();
-		//timer2_blocking_delay(duration_1ms*100);
+        gpio_toggle('B', 0);
+        gpio_toggle('E', 1);
+        gpio_toggle('B', 14);
 	}
 }
 
 void task2_handler (void *args) {
 	while(1) {
-		gpio_led_off();
-		//timer2_blocking_delay(duration_1s);
+        gpio_toggle('B', 0);
+        gpio_toggle('E', 1);
+        gpio_toggle('B', 14);
 	}
 }
 /*-----------------------------------------------------------*/
@@ -98,8 +105,10 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask,
 
 	//do stuff in here to debug
     for( ; ; ) {
-		gpio_led_on();
-		timer2_blocking_delay(duration_1ms*100);
+        gpio_toggle('B', 0);
+        gpio_toggle('E', 1);
+        gpio_toggle('B', 14);
+        for (int i = 0; i  < 32000000; i++);
 	}
     
 }
