@@ -65,6 +65,13 @@ Reset_Handler:
 /* Call the clock system initialization function.*/
 /*  bl  SystemInit
 
+/* Enable FPU */
+  ldr.w r0, =0xE000ED88
+  ldr   r1, [r0] 
+  orr   r1, r1, #0xF << 20
+  str   r1, [r0]
+  
+
 /* Copy the data segment initializers from flash to SRAM */
   ldr r0, =_sdata
   ldr r1, =_edata
