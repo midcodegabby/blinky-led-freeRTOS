@@ -77,6 +77,7 @@ void task1_handler(void *args) {
         gpio_toggle('B', 0);
         gpio_toggle('E', 1);
         gpio_toggle('B', 14);
+        for (uint32_t i = 0; i < 1000000; i++);
 	}
 }
 
@@ -105,10 +106,9 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask,
 
 	//do stuff in here to debug
     for( ; ; ) {
-        gpio_toggle('B', 0);
-        gpio_toggle('E', 1);
-        gpio_toggle('B', 14);
-        for (int i = 0; i  < 32000000; i++);
+        gpio_off('B', 0);
+        gpio_off('E', 1);
+        gpio_off('B', 14);
 	}
     
 }

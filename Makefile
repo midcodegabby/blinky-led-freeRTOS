@@ -9,8 +9,8 @@ MACH := cortex-m7
 MCU := -mcpu=$(MACH) -mfloat-abi=hard -mfpu=fpv5-d16
 AFLAGS=-mcpu=$(MACH) -mthumb 
 CFLAGS := $(MCU) -mthumb $(INCLUDES) --std=gnu11 -Wall -Wextra -Wpedantic -O1 -g3
-#LDFLAGS := $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -lc -lm -Wl,-Map=final.map
-LDFLAGS := -nostdlib -T $(LINKER) -Wl,-Map=final.map 
+LDFLAGS := $(MCU) -mthumb --specs=nano.specs -T $(LINKER) -lc -lm -Wl,-Map=final.map
+#LDFLAGS := -nostdlib -T $(LINKER) -Wl,-Map=final.map 
 
 VPATH := $(dir $(SOURCES))
 OBJ := $(patsubst %.c, %.o, $(notdir $(SOURCES)))
