@@ -14,6 +14,8 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "tcnt.h"
 #include "exti.h"
 #include "nvic.h"
+#include "uart.h"
+#include "misc.h"
 
 #include <FreeRTOS.h>
 #include <task.h>
@@ -43,7 +45,7 @@ static void hardware_init(void) {
 	//timer12_pwm_init();
 	//timer3_down_init(); 	
 	//uart_init(38400);   	
-	//uart_init(921600);
+	uart_init(921600);
 	AIRCR |= (VECTKEY);	//use the VECTKEY to gain write access to the AIRCR register
     AIRCR &= (NVIC_PriorityGroup_4); //clear bit 10 in AIRCR, resulting in no subpriorities
 }
@@ -73,19 +75,25 @@ int main(void) {
 /*---------------------------TASKS---------------------------*/
 /*-----------------------------------------------------------*/
 void task1_handler(void *args) {
+    const TickType_t xDelay = pdMS_TO_TICKS(3000);  /* 1 second */
+
 	while(1) {
-        gpio_toggle('B', 0);
-        gpio_toggle('E', 1);
-        gpio_toggle('B', 14);
-        for (uint32_t i = 0; i < 1000000; i++);
+        gpio_on('B', 0);
+        gpio_on('E', 1);
+        gpio_on('B', 14);
+
+        write("Hello World\r\n");
+
+        vTaskDelay(xDelay);
+    
 	}
 }
 
 void task2_handler (void *args) {
 	while(1) {
-        gpio_toggle('B', 0);
-        gpio_toggle('E', 1);
-        gpio_toggle('B', 14);
+        gpio_off('B', 0);
+        gpio_off('E', 1);
+        gpio_off('B', 14);
 	}
 }
 /*-----------------------------------------------------------*/

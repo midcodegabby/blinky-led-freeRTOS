@@ -26,7 +26,7 @@ Date: 31/8/2025
  * PD5 - USART2_TX
  *
  * To connect in Linux, run (to copy, install gvim, run "+y" on the line below:
- * picocom -b 38400 --databits 8 --parity n --stopbits 2 --flow n /dev/ttyUSB0
+ * picocom -b 921600 --databits 8 --parity n --stopbits 2 --flow n /dev/ttyUSB0
  *
 */
 status_t uart_init(uint32_t rate) {
@@ -77,4 +77,31 @@ status_t uart_tx(const char buf) {
 
 	return OK;
 }
+
+
+/*
+ * Send a buffer over uart
+ *
+ * In: Data buffer (must be null terminated
+ * Out: status (ERROR/OK)
+ *
+*/
+status_t write(const char* buf) {
+    uint32_t i = 0;     /* iterator for buf */
+
+    if (!buf) {
+        return ERROR;
+    }
+
+    for (i = 0; buf[i] != '\0'; i++) {
+        uart_tx(buf[i]);
+    }
+
+	return OK;
+}
+
+
+
+
+
 
