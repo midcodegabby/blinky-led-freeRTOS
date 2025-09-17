@@ -10,9 +10,9 @@ Date: 6/9/2025
 
 #define SYSCLK_FREQ     (64000000U)
 
-#define SCB 0xE000E008
+//#define SCB 0xE000E008
 
-#define AIRCR (*((volatile uint32_t *) (SCB + 0x0C)))
+//#define AIRCR (*((volatile uint32_t *) (SCB + 0x0C)))
 
 #define VECTKEY (0x5FA << 16)
 

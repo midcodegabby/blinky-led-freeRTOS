@@ -70,7 +70,6 @@ Reset_Handler:
   ldr   r1, [r0] 
   orr   r1, r1, #0xF << 20
   str   r1, [r0]
-  
 
 /* Copy the data segment initializers from flash to SRAM */
   ldr r0, =_sdata
@@ -102,19 +101,6 @@ LoopFillZerobss:
   cmp r2, r4
   bcc FillZerobss
 
-/* For debugging function in main */
-HardFault_Handler:
-  tst lr, #4
-  ite eq
-  mrseq r0, msp
-  mrsne r0, psp
-  ldr r1, [r0, #24]
-  ldr r2, handler2_address_const
-  bx r2
-
-handler2_address_const: 
-    .word prvGetRegistersFromStack
-  
 
 /* Call static constructors */
 /*    bl __libc_init_array
@@ -122,6 +108,20 @@ handler2_address_const:
   bl  main
   bx  lr
 .size  Reset_Handler, .-Reset_Handler
+
+/* For debugging in debug.c for freeRTOS */
+    .section  .text.HardFault_Handler
+  .weak  HardFault_Handler
+  .type  HardFault_Handler, %function
+HardFault_Handler:
+  tst lr, #4
+  ite eq
+  mrseq r0, msp
+  mrsne r0, psp
+  ldr r1, [r0, #24]
+  ldr r2, =prvGetRegistersFromStack
+  bx r2
+.size HardFault_Handler, .-HardFault_Handler
 
 /**
  * @brief  This is the code that gets called when the processor receives an
@@ -342,8 +342,9 @@ g_pfnVectors:
    .weak      NMI_Handler
    .thumb_set NMI_Handler,Default_Handler
 
-   .weak      HardFault_Handler
-   .thumb_set HardFault_Handler,Default_Handler
+   /* .weak      HardFault_Handler */
+   /* .thumb_set HardFault_Handler,Default_Handler */
+
 
    .weak      MemManage_Handler
    .thumb_set MemManage_Handler,Default_Handler

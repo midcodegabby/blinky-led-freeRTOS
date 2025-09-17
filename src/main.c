@@ -17,6 +17,8 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include "uart.h"
 #include "misc.h"
 
+#include "stm32h723xx.h"
+
 #include <FreeRTOS.h>
 #include <task.h>
 //#include <portable.h>
@@ -47,8 +49,8 @@ static void hardware_init(void) {
 	//timer3_down_init(); 	
 	//uart_init(38400);   	
 	uart_init(921600);
-	AIRCR |= (VECTKEY);	//use the VECTKEY to gain write access to the AIRCR register
-    AIRCR &= (NVIC_PriorityGroup_4); //clear bit 10 in AIRCR, resulting in no subpriorities
+	SCB->AIRCR |= (VECTKEY);	//use the VECTKEY to gain write access to the AIRCR register
+    SCB->AIRCR &= (NVIC_PriorityGroup_4); //clear bit 10 in AIRCR, resulting in no subpriorities
 }
 
 
@@ -127,11 +129,12 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask,
      * function is called if a stack overflow is detected. */
     taskDISABLE_INTERRUPTS();
 
+    gpio_on('B', 0);
+    gpio_on('E', 1);
+    gpio_on('B', 14);
+
 	//do stuff in here to debug
     for( ; ; ) {
-        gpio_on('B', 0);
-        gpio_on('E', 1);
-        gpio_on('B', 14);
 	}
     
 }
