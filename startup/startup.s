@@ -102,6 +102,20 @@ LoopFillZerobss:
   cmp r2, r4
   bcc FillZerobss
 
+/* For debugging function in main */
+HardFault_Handler:
+  tst lr, #4
+  ite eq
+  mrseq r0, msp
+  mrsne r0, psp
+  ldr r1, [r0, #24]
+  ldr r2, handler2_address_const
+  bx r2
+
+handler2_address_const: 
+    .word prvGetRegistersFromStack
+  
+
 /* Call static constructors */
 /*    bl __libc_init_array
 /* Call the application's entry point.*/

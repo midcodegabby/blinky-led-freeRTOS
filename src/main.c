@@ -19,6 +19,7 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 
 #include <FreeRTOS.h>
 #include <task.h>
+//#include <portable.h>
 
 #define STACK_SIZE (50)
 #define NVIC_PriorityGroup_4 (~(1 << 10))
@@ -76,17 +77,31 @@ int main(void) {
 /*-----------------------------------------------------------*/
 void task1_handler(void *args) {
     const TickType_t xDelay = pdMS_TO_TICKS(3000);  /* 1 second */
+    //int size = 27;
+    //char* pTimeStamp = (char*) pvPortMalloc(size);
+    //int timeList[12] = {9};     /* init to 0 */
+
+    /* Digits for time/date */
+    /* 0H:0M:0S  0D/0M/0Y */
+/*
+    snprintf(pTimeStamp, 27, "Time: %d%d:%d%d:%d%d  %d%d/%d%d/%d%d\r\n", timeList[0], timeList[1], \
+             timeList[2], timeList[3], timeList[4], timeList[5], timeList[6], timeList[7],         \
+             timeList[8], timeList[9], timeList[10], timeList[11]);
+*/
 
 	while(1) {
         gpio_on('B', 0);
         gpio_on('E', 1);
         gpio_on('B', 14);
 
+        
+        //write(pTimeStamp);
         write("Hello World\r\n");
 
         vTaskDelay(xDelay);
     
 	}
+    //vPortFree(pTimeStamp);
 }
 
 void task2_handler (void *args) {
@@ -114,9 +129,9 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask,
 
 	//do stuff in here to debug
     for( ; ; ) {
-        gpio_off('B', 0);
-        gpio_off('E', 1);
-        gpio_off('B', 14);
+        gpio_on('B', 0);
+        gpio_on('E', 1);
+        gpio_on('B', 14);
 	}
     
 }
