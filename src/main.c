@@ -79,31 +79,57 @@ int main(void) {
 /*-----------------------------------------------------------*/
 void task1_handler(void *args) {
     const TickType_t xDelay = pdMS_TO_TICKS(3000);  /* 1 second */
-    //int size = 27;
-    //char* pTimeStamp = (char*) pvPortMalloc(size);
-    //int timeList[12] = {9};     /* init to 0 */
+    int size = 50;
+    char* pTimeStamp = (char*) pvPortMalloc(size);
+    //char str[] = "12345678901234567890123456\0";
+    //pTimeStamp = str;
+    //pTimeStamp[26] = '\0';
+/*
+    pTimeStamp[0] = '0';
+    pTimeStamp[1] = '0';
+    pTimeStamp[2] = '\r';
+    pTimeStamp[3] = '\n';
+    pTimeStamp[4] = '\0';
+*/
+
+    int timeList[12] = {0};     /* init to 0 */
+
+    status_t writeStatus; 
 
     /* Digits for time/date */
     /* 0H:0M:0S  0D/0M/0Y */
-/*
-    snprintf(pTimeStamp, 27, "Time: %d%d:%d%d:%d%d  %d%d/%d%d/%d%d\r\n", timeList[0], timeList[1], \
-             timeList[2], timeList[3], timeList[4], timeList[5], timeList[6], timeList[7],         \
+
+    snprintf(pTimeStamp, size, "Time: %d%d:%d%d:%d%d  %d%d/%d%d/%d%d\r\n", timeList[0], timeList[1], 
+             timeList[2], timeList[3], timeList[4], timeList[5], timeList[6], timeList[7],         
              timeList[8], timeList[9], timeList[10], timeList[11]);
-*/
+
+
+
 
 	while(1) {
         gpio_on('B', 0);
         gpio_on('E', 1);
         gpio_on('B', 14);
 
-        
-        //write(pTimeStamp);
-        write("Hello World\r\n");
+        if (!pTimeStamp) {
+            writeStatus = write("ERROR: pTimeStamp is NULL\r\n");
+        }
+        else {
+            writeStatus = write(pTimeStamp);
+        }
+
+        if (writeStatus == OK) {
+            write("OK\r\n");
+        }
+        else {
+            write("ERROR\r\n");
+        }
+            
 
         vTaskDelay(xDelay);
     
 	}
-    //vPortFree(pTimeStamp);
+    vPortFree(pTimeStamp);
 }
 
 void task2_handler (void *args) {

@@ -70,7 +70,7 @@ status_t uart_init(uint32_t rate) {
  * Out: status (ERROR/OK)
  *
 */
-status_t uart_tx(const char buf) {
+status_t uart_tx(char buf) {
 	USART2->TDR = buf;
 	
 	while ((USART2->ISR & USART_ISR_TC) != USART_ISR_TC);
@@ -86,7 +86,7 @@ status_t uart_tx(const char buf) {
  * Out: status (ERROR/OK)
  *
 */
-status_t write(const char* buf) {
+status_t write(char* buf) {
     uint32_t i = 0;     /* iterator for buf */
 
     if (!buf) {
