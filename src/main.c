@@ -23,7 +23,7 @@ Purpose: To get the LD2 on the Nucleo-L476RG to turn on.
 #include <task.h>
 //#include <portable.h>
 
-#define STACK_SIZE (50)
+#define STACK_SIZE (200)
 #define NVIC_PriorityGroup_4 (~(1 << 10))
 
 const GPIO_mode_t led_mode = OUTPUT;
@@ -46,7 +46,7 @@ static void hardware_init(void) {
 	exti_init(); 
 	//timer3_pwm_init();
 	//timer12_pwm_init();
-	//timer3_down_init(); 	
+	timer3_up_init(); 	
 	//uart_init(38400);   	
 	uart_init(921600);
 	SCB->AIRCR |= (VECTKEY);	//use the VECTKEY to gain write access to the AIRCR register
@@ -79,22 +79,11 @@ int main(void) {
 /*-----------------------------------------------------------*/
 void task1_handler(void *args) {
     const TickType_t xDelay = pdMS_TO_TICKS(3000);  /* 1 second */
-    int size = 50;
-    char* pTimeStamp = (char*) pvPortMalloc(size);
-    //char str[] = "12345678901234567890123456\0";
-    //pTimeStamp = str;
-    //pTimeStamp[26] = '\0';
-/*
-    pTimeStamp[0] = '0';
-    pTimeStamp[1] = '0';
-    pTimeStamp[2] = '\r';
-    pTimeStamp[3] = '\n';
-    pTimeStamp[4] = '\0';
-*/
-
+    int size = 27;
+    char* pTimeStamp = (char*) pvPortMalloc(size*sizeof(char));
     int timeList[12] = {0};     /* init to 0 */
 
-    status_t writeStatus; 
+    status_t writeStatus = OK; 
 
     /* Digits for time/date */
     /* 0H:0M:0S  0D/0M/0Y */
@@ -102,9 +91,6 @@ void task1_handler(void *args) {
     snprintf(pTimeStamp, size, "Time: %d%d:%d%d:%d%d  %d%d/%d%d/%d%d\r\n", timeList[0], timeList[1], 
              timeList[2], timeList[3], timeList[4], timeList[5], timeList[6], timeList[7],         
              timeList[8], timeList[9], timeList[10], timeList[11]);
-
-
-
 
 	while(1) {
         gpio_on('B', 0);
@@ -117,6 +103,7 @@ void task1_handler(void *args) {
         else {
             writeStatus = write(pTimeStamp);
         }
+
 
         if (writeStatus == OK) {
             write("OK\r\n");
