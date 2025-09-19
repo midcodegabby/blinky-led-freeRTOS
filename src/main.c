@@ -142,12 +142,13 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask,
      * function is called if a stack overflow is detected. */
     taskDISABLE_INTERRUPTS();
 
-    gpio_on('B', 0);
-    gpio_on('E', 1);
-    gpio_on('B', 14);
 
 	//do stuff in here to debug
     for( ; ; ) {
+        gpio_toggle('B', 0);
+        gpio_toggle('E', 1);
+        gpio_toggle('B', 14);
+        timer3_blocking_delay(ONE_SECOND_10KHZ/30);
 	}
     
 }
