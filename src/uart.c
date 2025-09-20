@@ -78,6 +78,7 @@ status_t uart_tx(char buf) {
 	return OK;
 }
 
+//status_t uart_rx(char buf);
 
 /*
  * Send a buffer over uart
@@ -86,7 +87,7 @@ status_t uart_tx(char buf) {
  * Out: status (ERROR/OK)
  *
 */
-status_t write(char* buf) {
+status_t uart_write(char* buf) {
     uint32_t i = 0;     /* iterator for buf */
 
     if (!buf) {
@@ -100,8 +101,17 @@ status_t write(char* buf) {
 	return OK;
 }
 
+/* 
+ * Put a char into USART to transmit. 
+ *
+ * Overrides the __io_putchar variable that is used in the 
+ * _write syscall, thereby allowing printf to output to USART.
+ * 
+*/
+int __io_putchar(int ch) {
+	USART2->TDR = ch;
+	
+	while ((USART2->ISR & USART_ISR_TC) != USART_ISR_TC);
 
-
-
-
-
+	return 1;
+}

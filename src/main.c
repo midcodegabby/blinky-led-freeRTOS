@@ -96,22 +96,8 @@ void task1_handler(void *args) {
         gpio_on('B', 0);
         gpio_on('E', 1);
         gpio_on('B', 14);
-
-        if (!pTimeStamp) {
-            writeStatus = write("ERROR: pTimeStamp is NULL\r\n");
-        }
-        else {
-            writeStatus = write(pTimeStamp);
-        }
-
-
-        if (writeStatus == OK) {
-            write("OK\r\n");
-        }
-        else {
-            write("ERROR\r\n");
-        }
-            
+        
+        printf("%s", pTimeStamp);
 
         vTaskDelay(xDelay);
     

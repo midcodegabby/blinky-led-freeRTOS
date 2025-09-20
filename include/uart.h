@@ -12,7 +12,7 @@ Date: 8/31/2025
 
 status_t uart_init(uint32_t rate);
 status_t uart_tx(char buf);
-status_t write(char* buf);
+status_t uart_write(char* buf);
 //void uart_rx(uint8_t* buf);
 
 #endif /* _UART_H */
